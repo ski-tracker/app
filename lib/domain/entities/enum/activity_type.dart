@@ -1,10 +1,12 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ski_tracker/l10n/app_localizations.dart';
 
-enum ActivityType { running, walking, cycling }
+enum ActivityType { skiing, running, walking, cycling }
 
 extension ActivityTypeExtension on ActivityType {
   String getTranslatedName(AppLocalizations localization) {
     switch (this) {
+      case ActivityType.skiing:
+        return localization.skiing;
       case ActivityType.running:
         return localization.running;
       case ActivityType.walking:

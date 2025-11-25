@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 interface class FormUtils {
   static final ButtonStyle buttonStyle =
-      createButtonStyle(Colors.teal.shade800);
+      createButtonStyle(Colors.teal.shade400);
 
   static const TextStyle textFormFieldStyle = TextStyle(fontSize: 20);
 
@@ -11,10 +11,13 @@ interface class FormUtils {
 
   static ButtonStyle createButtonStyle(Color backgroundColor) {
     return ButtonStyle(
-      textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 20)),
-      minimumSize: MaterialStateProperty.all(const Size(150, 50)),
-      backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
-      shape: MaterialStateProperty.all(
+      textStyle: WidgetStateProperty.all(
+        const TextStyle(fontSize: 20, color: Colors.white),
+      ),
+      foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
+      minimumSize: WidgetStateProperty.all(const Size(150, 50)),
+      backgroundColor: WidgetStateProperty.all<Color>(backgroundColor),
+      shape: WidgetStateProperty.all(
         RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );

@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ski_tracker/l10n/app_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:run_tracker/main.dart';
+import 'package:ski_tracker/main.dart';
 import '../../../../domain/entities/activity.dart';
 import '../../timer/viewmodel/timer_view_model.dart';
 import '../utils/activity_utils.dart';

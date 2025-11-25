@@ -37,18 +37,52 @@ class LocationViewModel extends StateNotifier<LocationState> {
   Future<void> startGettingLocation() async {
     final metricsProvider = ref.read(metricsViewModelProvider.notifier);
 
-    await Geolocator.requestPermission();
+    print('📍 [LOCATION] Requesting location permission...');
+    final permission = await Geolocator.requestPermission();
+    print('📍 [LOCATION] Permission status: $permission');
+    
+    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      print('❌ [LOCATION] Permission denied! Cannot track location.');
+      return;
+    }
+    
+    print('✅ [LOCATION] Permission granted! Starting location stream...');
     _positionStream ??=
         Geolocator.getPositionStream().listen((Position position) {
       if (mounted) {
+        print('📍 [LOCATION] GPS Update: lat=${position.latitude}, lon=${position.longitude}, accuracy=${position.accuracy}m');
+        
         mapController.move(
           LatLng(position.latitude, position.longitude),
           17,
         );
 
         final timerProvider = ref.read(timerViewModelProvider.notifier);
-        if (timerProvider.isTimerRunning() && timerProvider.hasTimerStarted()) {
-          metricsProvider.updateMetrics();
+        final isRunning = timerProvider.isTimerRunning();
+        final hasStarted = timerProvider.hasTimerStarted();
+        
+        print('⏱️ [TIMER] isRunning=$isRunning, hasStarted=$hasStarted');
+        
+        if (isRunning && hasStarted) {
+          print('✅ [TRACKING] Timer is active - processing location update');
+          
+          // Update state first to ensure lastPosition is set before calculating metrics
+          final oldLastPosition = state.lastPosition;
+          state = state.copyWith(
+            currentPosition: position,
+            lastPosition: state.currentPosition ?? position,
+          );
+          
+          print('📍 [POSITION] lastPosition: ${oldLastPosition?.latitude},${oldLastPosition?.longitude}');
+          print('📍 [POSITION] currentPosition: ${state.currentPosition?.latitude},${state.currentPosition?.longitude}');
+          
+          // Only update metrics if we have both current and last position
+          if (state.currentPosition != null && state.lastPosition != null) {
+            print('📊 [METRICS] Calling updateMetrics()...');
+            metricsProvider.updateMetrics();
+          } else {
+            print('⚠️ [METRICS] Skipping - missing positions: current=${state.currentPosition != null}, last=${state.lastPosition != null}');
+          }
 
           final positions = List<LocationRequest>.from(state.savedPositions);
           positions.add(
@@ -59,12 +93,15 @@ class LocationViewModel extends StateNotifier<LocationState> {
             ),
           );
           state = state.copyWith(savedPositions: positions);
+          print('💾 [SAVED] Total positions saved: ${state.savedPositions.length}');
+        } else {
+          print('⏸️ [TRACKING] Timer not active - updating position for map only');
+          // Update position even when timer not running (for map display)
+          state = state.copyWith(
+            currentPosition: position,
+            lastPosition: state.currentPosition ?? position,
+          );
         }
-
-        state = state.copyWith(
-          currentPosition: position,
-          lastPosition: state.currentPosition ?? position,
-        );
       }
     });
   }

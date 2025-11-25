@@ -26,6 +26,24 @@ class Metrics extends HookConsumerWidget {
       distanceToDisplay = distance!;
     }
 
+    // Format distance: show meters if < 1 km, otherwise show km
+    String distanceText;
+    if (distanceToDisplay < 1.0) {
+      final meters = (distanceToDisplay * 1000).round();
+      distanceText = '$meters m';
+    } else {
+      distanceText = '${distanceToDisplay.toStringAsFixed(2)} km';
+    }
+
+    // Format speed: show m/s if < 1 km/h (very slow), otherwise show km/h
+    String speedText;
+    if (speedToDisplay < 1.0 && speedToDisplay > 0) {
+      final metersPerSecond = (speedToDisplay / 3.6).toStringAsFixed(2);
+      speedText = '$metersPerSecond m/s';
+    } else {
+      speedText = '${speedToDisplay.toStringAsFixed(2)} km/h';
+    }
+
     return Center(
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -34,14 +52,14 @@ class Metrics extends HookConsumerWidget {
           const Icon(Icons.location_on),
           const SizedBox(width: 8),
           Text(
-            '${distanceToDisplay.toStringAsFixed(2)} km',
+            distanceText,
             style: textStyle,
           ),
           const SizedBox(width: 40),
           const Icon(Icons.speed),
           const SizedBox(width: 8),
           Text(
-            '${speedToDisplay.toStringAsFixed(2)} km/h',
+            speedText,
             style: textStyle,
           ),
         ],

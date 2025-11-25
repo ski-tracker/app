@@ -1,12 +1,19 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../core/config/app_config.dart';
 import '../../domain/entities/activity.dart';
 import '../../domain/repositories/activity_repository.dart';
 import '../api/activity_api.dart';
 import '../model/request/activity_request.dart';
+import 'local_activity_repository_impl.dart';
 
 final activityRepositoryProvider =
-    Provider<ActivityRepository>((ref) => ActivityRepoImpl());
+    Provider<ActivityRepository>((ref) {
+      if (AppConfig.useLocalStorage) {
+        return LocalActivityRepoImpl();
+      }
+      return ActivityRepoImpl();
+    });
 
 interface class ActivityRepoImpl extends ActivityRepository {
   ActivityRepoImpl();

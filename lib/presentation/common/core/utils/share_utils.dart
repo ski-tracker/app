@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:esys_flutter_share_plus/esys_flutter_share_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ski_tracker/l10n/app_localizations.dart';
 
 interface class ShareUtils {
   static Future<void> shareImage(BuildContext context, Uint8List image) async {

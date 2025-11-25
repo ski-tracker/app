@@ -12,7 +12,7 @@ interface class SumUpState {
 
   factory SumUpState.initial() {
     return SumUpState(
-        isSaving: false, type: ActivityType.running, boundaryKey: GlobalKey());
+        isSaving: false, type: ActivityType.skiing, boundaryKey: GlobalKey());
   }
 
   SumUpState copyWith({

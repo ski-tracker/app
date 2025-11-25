@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../core/config/app_config.dart';
 import '../../core/utils/sharedPrefs_utils.dart';
 import '../../domain/repositories/user_repository.dart';
 import '../api/user_api.dart';
@@ -7,9 +8,15 @@ import '../model/request/edit_password_request.dart';
 import '../model/request/login_request.dart';
 import '../model/request/send_new_password_request.dart';
 import '../model/response/login_response.dart';
+import 'local_user_repository_impl.dart';
 
 final userRepositoryProvider =
-    Provider<UserRepository>((ref) => UserRepoImpl());
+    Provider<UserRepository>((ref) {
+      if (AppConfig.useLocalStorage) {
+        return LocalUserRepoImpl();
+      }
+      return UserRepoImpl();
+    });
 
 interface class UserRepoImpl extends UserRepository {
   UserRepoImpl();

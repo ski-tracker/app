@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:run_tracker/domain/entities/activity.dart';
-import 'package:run_tracker/domain/entities/location.dart';
+import 'package:ski_tracker/domain/entities/activity.dart';
+import 'package:ski_tracker/domain/entities/location.dart';
 
 import '../../../data/model/request/activity_request.dart';
 import '../../../data/repositories/activity_repository_impl.dart';

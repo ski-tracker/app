@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 
 import '../../../../../main.dart';
 import '../../core/services/text_to_speech_service.dart';
@@ -25,21 +25,26 @@ class TimerViewModel extends StateNotifier<TimerState> {
   /// Starts the timer.
   void startTimer() {
     bool isRunning = hasTimerStarted();
+    print('▶️ [TIMER] startTimer() called - wasRunning=$isRunning');
     stopwatch.start();
     state = state.copyWith(startDatetime: DateTime.now(), isRunning: true);
     timer = Timer.periodic(const Duration(seconds: 1), updateTime);
+    print('▶️ [TIMER] Timer started - isRunning=${stopwatch.isRunning}, elapsed=${stopwatch.elapsedMilliseconds}ms');
     if (!isRunning) {
       ref.read(textToSpeechService).sayGoodLuck();
-      Wakelock.enable();
+      WakelockPlus.enable();
+      print('▶️ [TIMER] First start - enabled wakelock');
     } else {
       ref.read(textToSpeechService).sayResume();
       ref.read(locationViewModelProvider.notifier).resumeLocationStream();
+      print('▶️ [TIMER] Resumed - resumed location stream');
     }
   }
 
   /// Checks if the timer has already started.
   bool hasTimerStarted() {
-    return stopwatch.elapsedMilliseconds > 0;
+    // Timer has started if stopwatch has been started (even if elapsed time is 0)
+    return stopwatch.isRunning || stopwatch.elapsedMilliseconds > 0;
   }
 
   /// Checks if the timer is currently running.
@@ -111,7 +116,7 @@ class TimerViewModel extends StateNotifier<TimerState> {
     timer?.cancel();
     state = state.copyWith(isRunning: false);
 
-    Wakelock.disable();
+    WakelockPlus.disable();
     navigatorKey.currentState?.pushNamed('/sumup');
   }
 

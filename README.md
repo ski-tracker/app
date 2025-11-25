@@ -1,7 +1,7 @@
-# run_tracker
-A flutter run tracker app - live tracking - Clean architecture.
+# Ski Tracker
+A Flutter ski tracking app - live tracking - Clean architecture.
 
-It's a run tracker app to track the distance , speed and time of your activity (running, cycling,......).
+It's a ski tracker app to track the distance, speed and time of your skiing activities (skiing, running, walking, cycling, etc.).
 
 ### State Management
 - Riverpod

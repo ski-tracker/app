@@ -42,7 +42,7 @@ interface class ActivityResponse extends Equatable {
     final activityTypeString = map['type']?.toString().toLowerCase();
     final activityType = ActivityType.values.firstWhere(
       (type) => type.name.toLowerCase() == activityTypeString,
-      orElse: () => ActivityType.running,
+      orElse: () => ActivityType.skiing,
     );
 
     return ActivityResponse(

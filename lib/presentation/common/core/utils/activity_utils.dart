@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:ski_tracker/l10n/app_localizations.dart';
 
 import '../../../../domain/entities/enum/activity_type.dart';
 import '../../../activity_details/view_model/activity_details_view_model.dart';
@@ -9,6 +9,8 @@ interface class ActivityUtils {
 
   static IconData getActivityTypeIcon(ActivityType type) {
     switch (type) {
+      case ActivityType.skiing:
+        return Icons.downhill_skiing;
       case ActivityType.running:
         return Icons.run_circle_outlined;
       case ActivityType.walking:
@@ -16,7 +18,7 @@ interface class ActivityUtils {
       case ActivityType.cycling:
         return Icons.pedal_bike;
       default:
-        return Icons.run_circle_rounded;
+        return Icons.downhill_skiing;
     }
   }
 
